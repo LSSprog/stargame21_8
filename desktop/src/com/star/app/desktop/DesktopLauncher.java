@@ -11,4 +11,6 @@ public class DesktopLauncher {
 		config.height = 720;
 		new LwjglApplication(new StarGame(), config);
 	}
+
+	// Прикрутить что-нибудь на своё усмотрение
 }
