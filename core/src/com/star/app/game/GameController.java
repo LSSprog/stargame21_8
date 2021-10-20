@@ -79,7 +79,7 @@ public class GameController {
     public GameController(SpriteBatch batch) {
         this.background = new Background(this);
         this.hero = new Hero(this);
-        this.bot = new Bot(this);
+        //this.bot = new Bot(this);
         this.asteroidController = new AsteroidController(this);
         this.bulletController = new BulletController(this);
         this.particleController = new ParticleController();
@@ -97,6 +97,11 @@ public class GameController {
         this.music.play();
 
         generateBigAsteroids(1);
+        generateBot();
+    }
+
+    private void generateBot() {
+        this.bot = new Bot(this);
     }
 
     private void generateBigAsteroids(int count) {
@@ -114,20 +119,21 @@ public class GameController {
         roundTimer += dt;
         background.update(dt);
         hero.update(dt);
-        if (bot.isAlive()) {
+        //if (bot.getIsAlive()) {
             bot.update(dt);
-        }
+        //}
         asteroidController.update(dt);
         bulletController.update(dt);
         powerUpsController.update(dt);
         particleController.update(dt);
         infoController.update(dt);
         checkCollisions();
-        if (!hero.isAlive()) {
+        if (!hero.getIsAlive()) {
             ScreenManager.getInstance().changeScreen(ScreenManager.ScreenType.GAMEOVER, hero);
         }
-        if (asteroidController.getActiveList().size() == 0) {
+        if ((asteroidController.getActiveList().size() == 0) && (!bot.isAlive)) {
             level++;
+            generateBot();
             generateBigAsteroids(level <= 3 ? level : 3);
             roundTimer = 0.0f;
         }
@@ -215,7 +221,7 @@ public class GameController {
         for (int i = 0; i < bulletController.getActiveList().size(); i++) {
             Bullet b = bulletController.getActiveList().get(i);
 
-            if (b.getOwner().getOwnerType() == OwnerType.PLAYER && bot.isAlive()) {
+            if (b.getOwner().getOwnerType() == OwnerType.PLAYER && bot.getIsAlive()) {
                 if (bot.getHitArea().contains(b.getPosition())) {
                     bot.takeDamage(hero.currentWeapon.getDamage());
                     b.deactivate();

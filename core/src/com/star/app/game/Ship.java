@@ -23,6 +23,7 @@ public class Ship {
     protected Weapon[] weapons;
     protected int weaponNum;
     protected OwnerType ownerType;
+    public boolean isAlive;
 
     public OwnerType getOwnerType() {
         return ownerType;
@@ -40,9 +41,17 @@ public class Ship {
         return magneticField;
     }
 
-    public boolean isAlive() {
-        return hp > 0;
+    public boolean getIsAlive() {
+        return isAlive;
     }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+
+    //    public boolean isAlive() {
+//        return hp > 0;
+//    }
 
     public float getAngle() {
         return angle;
@@ -65,6 +74,7 @@ public class Ship {
         this.magneticField = new Circle(position, 100);
         this.velocity = new Vector2(0, 0);
         this.angle = 0.0f;
+        this.isAlive = false;
     }
 
     public void update(float dt) {
@@ -107,8 +117,10 @@ public class Ship {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(texture, position.x - 32, position.y - 32, 32, 32, 64, 64, 1, 1,
-                angle);
+        if (isAlive) {
+            batch.draw(texture, position.x - 32, position.y - 32, 32, 32, 64, 64, 1, 1,
+                    angle);
+        }
     }
 
     public void takeDamage(int amount) {
