@@ -9,6 +9,7 @@ import com.star.app.screen.utils.Assets;
 public class Bot extends Ship {
     private int critical;
     private Vector2 tempVector;
+    private float timerBot;
 
     public int getCritical() {
         return critical;
@@ -26,30 +27,41 @@ public class Bot extends Ship {
         createWeapons();
         this.weaponNum = 0;
         this.currentWeapon = weapons[weaponNum];
+        this.timerBot = 0.0f;
+        this.isAlive = false;
     }
 
     public void update(float dt) {
-        super.update(dt);
-        tempVector.set(gc.getHero().getPosition()).sub(position).nor();
-        angle = tempVector.angleDeg();
-        if (gc.getHero().getPosition().dst(position) > 200) {
-            accelerate(dt);
+        timerBot += dt;
+        if (timerBot > 5.0f) {
+            this.setAlive(true);
         }
-        if (gc.getHero().getPosition().dst(position) < 300) {
-            tryToFire();
+        if (hp < 0 ) {
+            isAlive = false;
         }
-        if (velocity.len() > 50.0f) {
-            float bx = position.x + MathUtils.cosDeg(angle + 180) * 20;
-            float by = position.y + MathUtils.sinDeg(angle + 180) * 20;
-            for (int i = 0; i < 2; i++) {
-                gc.getParticleController().setup(
-                        bx + MathUtils.random(-4, 4), by + MathUtils.random(-4, 4),
-                        velocity.x * -0.3f + MathUtils.random(-20, 20), velocity.y * -0.3f + MathUtils.random(-20, 20),
-                        0.5f,
-                        1.2f, 0.2f,
-                        1.0f, 0.0f, 0.0f, 1.0f,
-                        1.0f, 0.0f, 0.0f, 0.0f
-                );
+        if (this.isAlive) {
+            super.update(dt);
+            tempVector.set(gc.getHero().getPosition()).sub(position).nor();
+            angle = tempVector.angleDeg();
+            if (gc.getHero().getPosition().dst(position) > 200) {
+                accelerate(dt);
+            }
+            if (gc.getHero().getPosition().dst(position) < 300) {
+                tryToFire();
+            }
+            if (velocity.len() > 50.0f) {
+                float bx = position.x + MathUtils.cosDeg(angle + 180) * 20;
+                float by = position.y + MathUtils.sinDeg(angle + 180) * 20;
+                for (int i = 0; i < 2; i++) {
+                    gc.getParticleController().setup(
+                            bx + MathUtils.random(-4, 4), by + MathUtils.random(-4, 4),
+                            velocity.x * -0.3f + MathUtils.random(-20, 20), velocity.y * -0.3f + MathUtils.random(-20, 20),
+                            0.5f,
+                            1.2f, 0.2f,
+                            1.0f, 0.0f, 0.0f, 1.0f,
+                            1.0f, 0.0f, 0.0f, 0.0f
+                    );
+                }
             }
         }
     }

@@ -72,6 +72,7 @@ public class Hero extends Ship {
         createWeapons();
         this.weaponNum = 0;
         this.currentWeapon = weapons[weaponNum];
+        this.setAlive(true);
     }
 
     public void renderGUI(SpriteBatch batch, BitmapFont font) {
@@ -143,6 +144,7 @@ public class Hero extends Ship {
     }
 
     public void update(float dt) {
+        if (hp < 0) {this.setAlive(false);}
         super.update(dt);
         updateScore(dt);
         if (Gdx.input.isKeyPressed(Input.Keys.P)) {

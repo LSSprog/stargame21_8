@@ -50,7 +50,7 @@ public class WorldRenderer {
         gc.getBackground().render(batch);
         gc.getAsteroidController().render(batch);
         gc.getHero().render(batch);
-        if (gc.getBot().isAlive()) {
+        if (gc.getBot().getIsAlive()) {
             gc.getBot().render(batch);
         }
         gc.getBulletController().render(batch);
